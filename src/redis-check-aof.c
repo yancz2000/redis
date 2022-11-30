@@ -512,7 +512,7 @@ static sds checkAofVersion(void) {
 }
 
 void usageAof(char *path) {
-    printf("Usage: %s [--fix|--truncate-to-timestamp $timestamp] <file.manifest|file.aof>\n", path);
+    //printf("Usage: %s [--fix|--truncate-to-timestamp $timestamp] <file.manifest|file.aof>\n", path);
     exit(1);
 }
 

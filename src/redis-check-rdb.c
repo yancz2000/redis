@@ -421,12 +421,14 @@ int redis_check_rdb_main(int argc, char **argv, FILE *fp) {
 
     if (argc != 2 && fp == NULL) {
         //usage(argv[0]);
+        goto usage;
     } else if (!strcmp(argv[1],"-v") || !strcmp(argv[1], "--version")) {
         sds version = checkRdbVersion();
         printf("redis-check-rdb %s\n", version);
         sdsfree(version);
         exit(0);
     } else if (!strcmp(argv[1],"-h") || !strcmp(argv[1], "--help")) {
+        goto usage;
        // usage(argv[0]);
     }
 
@@ -450,4 +452,8 @@ int redis_check_rdb_main(int argc, char **argv, FILE *fp) {
     }
     if (fp) return (retval == 0) ? C_OK : C_ERR;
     exit(retval);
+
+usage:
+    //fprintf(stderr, "Usage: %s <rdb-file-name>\n", argv[0]);
+    exit(1);
 }

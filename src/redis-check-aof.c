@@ -505,6 +505,17 @@ void checkOldStyleAof(char *filepath, int fix, int preamble) {
     printAofStyle(ret, filepath, (char *)"AOF");
 }
 
+static sds checkAofVersion(void) {
+    sds version;
+    version = sdscatprintf(sdsempty(), "%s", REDIS_VERSION);
+    return version;
+}
+
+void usageAof(char *path) {
+    //printf("Usage: %s [--fix|--truncate-to-timestamp $timestamp] <file.manifest|file.aof>\n", path);
+    exit(1);
+}
+
 int redis_check_aof_main(int argc, char **argv) {
     char *filepath;
     char temp_filepath[PATH_MAX + 1];
@@ -512,7 +523,14 @@ int redis_check_aof_main(int argc, char **argv) {
     int fix = 0;
 
     if (argc < 2) {
-        goto invalid_args;
+        usageAof(argv[0]);
+    } else if (!strcmp(argv[1],"-v") || !strcmp(argv[1], "--version")) {
+	    sds version = checkAofVersion();
+        printf("redis-check-aof %s\n", version);
+        sdsfree(version);
+        exit(0);
+    } else if (!strcmp(argv[1],"-h") || !strcmp(argv[1], "--help")) {
+        usageAof(argv[0]);
     } else if (argc == 2) {
         filepath = argv[1];
     } else if (argc == 3) {
@@ -520,7 +538,7 @@ int redis_check_aof_main(int argc, char **argv) {
             filepath = argv[2];
             fix = 1;
         } else {
-            goto invalid_args;
+            usageAof(argv[0]);
         }
     } else if (argc == 4) {
         if (!strcmp(argv[1], "--truncate-to-timestamp")) {
@@ -533,10 +551,10 @@ int redis_check_aof_main(int argc, char **argv) {
             }
             filepath = argv[3];
         } else {
-            goto invalid_args;
+            usageAof(argv[0]);
         }
     } else {
-        goto invalid_args;
+        usageAof(argv[0]);
     }
 
     /* In the glibc implementation dirname may modify their argument. */
@@ -558,9 +576,4 @@ int redis_check_aof_main(int argc, char **argv) {
     }
 
     exit(0);
-
-invalid_args:
-    printf("Usage: %s [--fix|--truncate-to-timestamp $timestamp] <file.manifest|file.aof>\n",
-        argv[0]);
-    exit(1);
 }

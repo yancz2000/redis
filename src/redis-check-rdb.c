@@ -399,6 +399,11 @@ static sds checkRdbVersion(void) {
     return version;
 }
 
+/*void usage(char *path) {
+    fprintf(stderr, "Usage: %s <rdb-file-name>\n", path);
+    exit(0);
+}*/
+
 /* RDB check main: called form server.c when Redis is executed with the
  * redis-check-rdb alias, on during RDB loading errors.
  *
@@ -415,13 +420,16 @@ int redis_check_rdb_main(int argc, char **argv, FILE *fp) {
     struct timeval tv;
 
     if (argc != 2 && fp == NULL) {
-        fprintf(stderr, "Usage: %s <rdb-file-name>\n", argv[0]);
-        exit(1);
+        //usage(argv[0]);
+        goto usage;
     } else if (!strcmp(argv[1],"-v") || !strcmp(argv[1], "--version")) {
         sds version = checkRdbVersion();
         printf("redis-check-rdb %s\n", version);
         sdsfree(version);
         exit(0);
+    } else if (!strcmp(argv[1],"-h") || !strcmp(argv[1], "--help")) {
+        goto usage;
+       // usage(argv[0]);
     }
 
     gettimeofday(&tv, NULL);
@@ -444,4 +452,9 @@ int redis_check_rdb_main(int argc, char **argv, FILE *fp) {
     }
     if (fp) return (retval == 0) ? C_OK : C_ERR;
     exit(retval);
+
+usage:
+    //fprintf(stderr, "Usage: %s <rdb-file-name>\n", argv[0]);
+    //printf("Usage: %s <rdb-file-name>\n", argv[0]);
+    exit(1);
 }

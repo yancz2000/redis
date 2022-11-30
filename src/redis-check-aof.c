@@ -538,7 +538,7 @@ int redis_check_aof_main(int argc, char **argv) {
         sdsfree(version);
         exit(0);
     } else if (!strcmp(argv[1],"-h") || !strcmp(argv[1], "--help")) {
-        usageAof(argv[0]);
+        //usageAof(argv[0]);
     } else if (argc == 2) {
         filepath = argv[1];
     } else if (argc == 3) {
@@ -546,7 +546,7 @@ int redis_check_aof_main(int argc, char **argv) {
             filepath = argv[2];
             fix = 1;
         } else {
-            usageAof(argv[0]);
+            //usageAof(argv[0]);
         }
     } else if (argc == 4) {
         if (!strcmp(argv[1], "--truncate-to-timestamp")) {
@@ -559,10 +559,10 @@ int redis_check_aof_main(int argc, char **argv) {
             }
             filepath = argv[3];
         } else {
-            usageAof(argv[0]);
+           // usageAof(argv[0]);
         }
     } else {
-        usageAof(argv[0]);
+       // usageAof(argv[0]);
     }
 
     /* In the glibc implementation dirname may modify their argument. */

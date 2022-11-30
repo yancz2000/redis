@@ -449,5 +449,5 @@ int redis_check_rdb_main(int argc, char **argv, FILE *fp) {
         rdbShowGenericInfo();
     }
     if (fp) return (retval == 0) ? C_OK : C_ERR;
-    exit(retval); 
+    exit(retval);
 }
